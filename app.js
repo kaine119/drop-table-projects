@@ -8,20 +8,6 @@ function initMap() {
     zoom: 7
   });
 
-  // testing
-  var testing = [
-    {lat: 11.25, lng: 104.2, weight: 35}
-  ]
-  var heatmap = drawHeatmapLayer(testing);
-  heatmap.set('radius', 50)
-
-  var polygonTest = [
-    {lat: 11.25, lng: 104.2},
-    {lat: 11.75, lng: 104.2},
-    {lat: 11.50, lng: 105.0}
-  ];
-  var polygon = drawPolygon(polygonTest);
-  polygon.strokeColor = "#0000ff"
 }
 
 // takes an array of data in the form {lat, lng, weight} 
