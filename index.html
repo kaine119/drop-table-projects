@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Map</title>
+  <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
+  <script src="materialize.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  
-
+	<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Help Me.</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#">Map</a></li>
+        <li><a href="#">About us</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="map" class="z-depth-3"></div>
   <script type="text/javascript" src="./app.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVrWvMC4ofsa2IBbnubiVYRvaav--aKPk&callback=initMap"
     async defer></script>
