@@ -45,15 +45,15 @@ function drawPolygon(points) {
 // takes an origin point (google.maps.LatLng), layer returned from drawHeatmap() and some distance in meters
 // and returns an array of points within distance.
 function findNearbyPointsInHeatmap(origin, layer, distance) {
-  var toReturn = []
+  var count;
   layer.data.forEach(function(point) {
     // if the actualdistance between origin and current point is less than distance....
     if (google.maps.geometry.spherical.computeDistanceBetween(point.location, origin) < distance) {
-      // return it
-      toReturn.push(point);
+      // it's counted.
+      count++;
     }
   });
-  return toReturn.length
+  return count;
 }
 
 // takes an origin point (google.maps.LatLng) and layer returned from drawHeatmap()
