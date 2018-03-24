@@ -86,24 +86,22 @@ function polyObj(layerName){
   this.minVal = 10000000.0;
 
   this.addPolygon = function(data, name=null){
-    value = data[1];
-    mapData = data[0];
     updateOpacity = false;
-    if (value>this.maxVal){
-      this.maxVal = value;
+    if (data[1]>this.maxVal){
+      this.maxVal = data[1];
       updateOpacity = true;
     }
-    if (value<this.minVal){
-      this.minVal = value;
+    if (data[1]<this.minVal){
+      this.minVal = data[1];
       updateOpacity = true;
     }
     if (updateOpacity){
       this.updatePolyOpacity();
     }
     if (name=null){
-      name = Sring(value);
+      name = Sring(data[1]);
     }
-    this.layerObj.push(new polygon(mapData, name, value, [this.minVal,this.maxVal]));
+    this.layerObj.push(new polygon(data[0], name, data[1], [this.minVal,this.maxVal]));
   }
 
   this.updatePolyOpacity = function(){
@@ -119,22 +117,21 @@ function polygon(data, name, value, range){
   this.name = name;
   this.value = value;
   this.range = range;
-  opacity = ( this.value - this.range[0] )/(this.range[1] - this.range[0] + 0.00000000001) * 0.6 + 0.2;
-  console.log(opacity);
+  this.opacity = ( this.value - this.range[0] )/(this.range[1] - this.range[0] + 0.00000000001) * 0.6 + 0.2;
   this.layerObj = new google.maps.Polygon({
-    paths: data,
-    strokeColor: "#FF0000",
-    strokeOpacity: opacity,
-    strokeWeight: 1,
-    fillColor: '#FF0000',
-    fillOpacity: opacity
-  });
+      paths: data,
+      strokeColor: "#FF0000",
+      strokeOpacity: this.opacity,
+      strokeWeight: 1,
+      fillColor: '#FF0000',
+      fillOpacity: this.opacity
+    });
   this.updateOpacity = function(range){
     this.range = range;
-    opacity = ( this.value - this.range[0] )/(this.range[1] - this.range[0] + 0.00000000001) * 0.6 + 0.2;
+    this.opacity = ( this.value - this.range[0] )/(this.range[1] - this.range[0] + 0.00000000001) * 0.6 + 0.2;
     this.layerObj.setOptions({
-      fillOpacity : opacity,
-      strokeOpacity : opacity
+      fillOpacity : this.opacity,
+      strokeOpacity : this.opacity
     });
   }
   this.onMap = function(gMap){
