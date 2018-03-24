@@ -20,8 +20,12 @@ function initMap() {
     position: map.center,
     map: map
   });
-  console.log(findNearbyPointsInLayer(map.center, mineCasualtiesHeatmap, 30))
-
+  console.log(findNearbyPointsInHeatmap(map.center, mineCasualtiesHeatmap, 30))
+  console.log(mineCasualtiesHeatmap.data)
+  new google.maps.Marker({
+    position: findClosestPointInHeatmap(map.center, mineCasualtiesHeatmap).location,
+    map: map
+  });
   for (var i = 0; i < electricity_coverage.length; i++) {
     var region = drawPolygon(electricity_coverage[i]);
     region.strokeWeight = 0
@@ -63,14 +67,32 @@ function drawPolygon(points) {
   return polygon;
 }
 
-// takes an origin point (google.maps.LatLng), layer returned from draw*() functions and some distance in meters
-// and returns an array of points within  distance.
-function findNearbyPointsInLayer(origin, layer, distance) {
+// takes an origin point (google.maps.LatLng), layer returned from drawHeatmap() and some distance in meters
+// and returns an array of points within distance.
+function findNearbyPointsInHeatmap(origin, layer, distance) {
   var toReturn = []
   layer.data.forEach(function(point) {
+    // if the actualdistance between origin and current point is less than distance....
     if (google.maps.geometry.spherical.computeDistanceBetween(point.location, origin) < distance) {
+      // return it
       toReturn.push(point);
     }
   });
   return toReturn.length
+}
+
+// takes an origin point (google.maps.LatLng) and layer returned from drawHeatmap()
+// and returns the nearest point on the layer.
+function findClosestPointInHeatmap(origin, layer) {
+  var distanceBetween = google.maps.geometry.spherical.computeDistanceBetween; // shortcut
+  var toReturn = layer.data.getAt(0).location, // initialize; if nothing else is smaller, first will be returned
+      minDistance = google.maps.geometry.spherical.computeDistanceBetween(layer.data.getAt(0).location, origin);
+  layer.data.forEach(function(point) {
+    currentDistance = distanceBetween(origin, point.location);
+    if (currentDistance < minDistance) {
+      minDistance = currentDistance;
+      toReturn = point;
+    }
+  });
+  return toReturn;
 }
