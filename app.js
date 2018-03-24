@@ -11,14 +11,22 @@ function initMap() {
   var testing = [
     {lat: 11.25, lng: 104.2, weight: 35}
   ]
-  addHeatmapLayer(testing)
+  drawHeatmapLayer(testing)
+
+  var polygonTest = [
+    {lat: 11.25, lng: 104.2},
+    {lat: 11.75, lng: 104.2},
+    {lat: 11.50, lng: 105.0}
+  ];
+  var polygon = drawPolygon(polygonTest);
+  polygon.strokeColor = "#0000ff"
 }
 
 // takes an array of data in the form {lat, lng, weight} 
 // and plots all of them on the map.
 // lat, lng: coordinates for point
 // weight: weight of heatmap point (standard = 1)
-function addHeatmapLayer(data) {
+function drawHeatmapLayer(data) {
   var dataToPlot = [];
   for (var i = 0; i < data.length; i++) { 
     dataToPlot.push({
@@ -30,5 +38,21 @@ function addHeatmapLayer(data) {
     data: dataToPlot
   });
   heatmap.setMap(map);
+}
+
+// takes an array of coordinates {lat, lng}
+// and draws a polygon through those points, in order.
+// returns a polygon object
+function drawPolygon(points) {
+  var polygon = new google.maps.Polygon({
+    paths: points,
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35
+  });
+  polygon.setMap(map)
+  return polygon;
 }
 
