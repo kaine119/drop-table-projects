@@ -20,16 +20,22 @@ function initMap() {
     position: map.center,
     map: map
   });
-  console.log(findNearbyPointsInHeatmap(map.center, mineCasualtiesHeatmap, 30))
-  console.log(mineCasualtiesHeatmap.data)
+  // console.log(findNearbyPointsInHeatmap(map.center, mineCasualtiesHeatmap, 30))
+  // console.log(mineCasualtiesHeatmap.data)
   new google.maps.Marker({
     position: findClosestPointInHeatmap(map.center, mineCasualtiesHeatmap).location,
-    map: map
+    map: map,
+    label: "Closest"
   });
+
+
+  var polygons = []
   for (var i = 0; i < electricity_coverage.length; i++) {
-    var region = drawPolygon(electricity_coverage[i]);
+    var region = drawPolygon(electricity_coverage[i])
+    polygons.push(region);
     region.strokeWeight = 0
   }
+  // console.log(findPolygonContaining(map.center, polygons))
 }
 
 // takes an array of data in the form {lat, lng, weight} 
@@ -95,4 +101,19 @@ function findClosestPointInHeatmap(origin, layer) {
     }
   });
   return toReturn;
+}
+
+// takes a target point (google.maps.LatLng) and array of polygons (google.maps.Polygon)
+// returns the first polygon the point is in, or null otherwise.
+function findPolygonContaining(target, polygons) {
+  var contains = google.maps.geometry.poly.containsLocation // shortcut
+  for (var i = 0; i < polygons.length; i++) {
+    // if the current polygon contains target
+    if (contains(target, polygons[i])) {
+      // cut the loop short; this is the first polygon the point is in
+      return polygons[i];
+    }
+  }
+  // if none of the polygons contain the target, just...
+  return null;
 }
