@@ -11,8 +11,16 @@ function initMap() {
     zoom: 7
   });
 
+  /*===============================
+  =            TESTING            =
+  ===============================*/
   var mineCasualtiesHeatmap = drawHeatmapLayer(mine_casualties);
   mineCasualtiesHeatmap.set("radius", 30);
+  new google.maps.Marker({
+    position: map.center,
+    map: map
+  });
+  console.log(findNearbyPointsInLayer(map.center, mineCasualtiesHeatmap, 30))
 
   for (var i = 0; i < electricity_coverage.length; i++) {
     var region = drawPolygon(electricity_coverage[i]);
@@ -35,7 +43,6 @@ function drawHeatmapLayer(data) {
   var heatmap = new google.maps.visualization.HeatmapLayer({
     data: dataToPlot
   });
-  console.log(heatmap)
   heatmap.setMap(map);
   return heatmap;
 }
@@ -54,4 +61,16 @@ function drawPolygon(points) {
   });
   polygon.setMap(map)
   return polygon;
+}
+
+// takes an origin point (google.maps.LatLng), layer returned from draw*() functions and some distance in meters
+// and returns an array of points within  distance.
+function findNearbyPointsInLayer(origin, layer, distance) {
+  var toReturn = []
+  layer.data.forEach(function(point) {
+    if (google.maps.geometry.spherical.computeDistanceBetween(point.location, origin) < distance) {
+      toReturn.push(point);
+    }
+  });
+  return toReturn.length
 }
