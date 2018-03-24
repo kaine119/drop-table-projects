@@ -8,10 +8,13 @@ function initMap() {
     zoom: 8
   });
 
+
+  // testing
   var testing = [
     {lat: 11.25, lng: 104.2, weight: 35}
   ]
-  drawHeatmapLayer(testing)
+  var heatmap = drawHeatmapLayer(testing);
+  heatmap.set('radius', 50)
 
   var polygonTest = [
     {lat: 11.25, lng: 104.2},
@@ -38,6 +41,7 @@ function drawHeatmapLayer(data) {
     data: dataToPlot
   });
   heatmap.setMap(map);
+  return heatmap;
 }
 
 // takes an array of coordinates {lat, lng}
