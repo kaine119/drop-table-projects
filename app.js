@@ -18,7 +18,6 @@ function initMap() {
     Categories.categories[0].polys[0].addPolygon([electricity_coverage[i],i]);
   }
   Categories.categories[1].addHeatmapLayer("mine casualties", mine_casualties);
-  Categories.allOn(map);
   map.addListener('click', handleClicks);
 
 
@@ -54,6 +53,10 @@ function initMap() {
 var elem = document.querySelector('.collapsible');
 var instance = M.Collapsible.init(elem, {});
 
+function ckChange(id){
+  var indexes = id.split("_");
+  Categories.toggle_on_off(parseInt(indexes[0]),parseInt(indexes[1]),parseInt(indexes[2]),map);
+}
 
 //console.log(html_collapsible_table(Categories))
 //document.getElementById("dataFilter").innerHTML = "<h1>HELLO</h1>"
