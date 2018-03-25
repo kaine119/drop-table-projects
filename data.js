@@ -67,16 +67,21 @@ function catObj(){
     var matches = []
     for (var i = 0; i < this.categories.length; i++) {
       var matchingHeatmaps = [], matchingPolys = [];
-      this.categories[i].heatmaps.forEach(function(heatmap){
-        if (heatmap.name.includes(query)) {
-          matchingHeatmaps.push(heatmap);
-        }
-      });
-      this.categories[i].polys.forEach(function(poly){
-        if (poly.name.includes(query)) {
-          matchingPolys.push(poly);
-        }
-      });
+      if (this.categories[i].name.includes(query)){
+        matchingHeatmaps = this.categories[i].heatmaps;
+        matchingPolys = this.categories[i].polys;
+      } else {
+        this.categories[i].heatmaps.forEach(function(heatmap){
+          if (heatmap.name.includes(query)) {
+            matchingHeatmaps.push(heatmap);
+          }
+        });
+        this.categories[i].polys.forEach(function(poly){
+          if (poly.name.includes(query)) {
+            matchingPolys.push(poly);
+          }
+        });
+      }
       if (matchingHeatmaps.length > 0 || matchingPolys.length > 0) {
         matches.push({ 
           name: this.categories[i].name,
