@@ -90,3 +90,6 @@ var instance = M.Collapsible.init(elem, {});
 
 //console.log(html_collapsible_table(Categories))
 //document.getElementById("dataFilter").innerHTML = "<h1>HELLO</h1>"
+function scrolltobottom(){
+  window.scrollTo(0,1500);
+}
