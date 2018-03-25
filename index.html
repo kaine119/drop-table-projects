@@ -28,25 +28,30 @@
 
   <div id="map" class="z-depth-3"></div>
   <div class="container">
-   <ul class="collapsible popout" id="dataFilter">
+    <ul class="collapsible popout" id="dataFilter">
+      <li v-for="category in categories">
+        <div class="collapsible-header waves-effect waves-teal">
+          <i class="material-icons">filter_drama</i>{{ category.name }}
+        </div>
 
-      <li><div class="collapsible-header waves-effect waves-teal"><i class="material-icons">filter_drama</i>
-      First
-    </div><div class="collapsible-body"><ul class="collection">
-
-        <li class="collection-item flow-text"><div>
-          Test
-              <label class="secondary-content"><input type="checkbox" /><span>show data</span></label></div></li>
-
-              
-
-          </ul></div></li>
-
+        <div class="collapsible-body">
+          <ul class="collection">
+            <li class="collection-item flow-text" v-for="layer in category.heatmaps.concat(category.polys)">
+              <div>
+                {{ layer.name }}, a {{ layer.type }}
+                <label class="secondary-content">
+                  <input type="checkbox" v-model="layer.state" v-on:click="toggleVisibility(layer)"/><span>show data</span>
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </li>
     </ul>
   </div>
 
   <script src="materialize/js/materialize.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script type="text/javascript" src="./data.js"></script>
   <script type="text/javascript" src="./map-helpers.js"></script>
   <script type="text/javascript" src="./app.js"></script>
