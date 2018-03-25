@@ -59,6 +59,35 @@ function catObj(){
   		}
   	}
    }
+
+  this.search = function(query) {
+    if (query == "") {
+      return this.categories;
+    }
+    var matches = []
+    for (var i = 0; i < this.categories.length; i++) {
+      var matchingHeatmaps = [], matchingPolys = [];
+      this.categories[i].heatmaps.forEach(function(heatmap){
+        if (heatmap.name.includes(query)) {
+          matchingHeatmaps.push(heatmap);
+        }
+      });
+      this.categories[i].polys.forEach(function(poly){
+        if (poly.name.includes(query)) {
+          matchingPolys.push(poly);
+        }
+      });
+      if (matchingHeatmaps.length > 0 || matchingPolys.length > 0) {
+        matches.push({ 
+          name: this.categories[i].name,
+          heatmaps: matchingHeatmaps, 
+          polys: matchingPolys 
+        });
+      }
+      
+    }
+    return matches;
+  }
 }
 
 function cat(catName){

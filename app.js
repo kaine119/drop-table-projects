@@ -22,11 +22,17 @@ function initMap() {
   map.addListener('click', handleClicks);
 
 
+  console.log(Categories.search("mine"))
 
   var categoryListApp = new Vue({
-    el: "#dataFilter",
+    el: "#category-list",
     data: {
-      categories: Categories.categories
+      query: "",
+    },
+    computed: {
+      categories: function() {
+         return Categories.search(this.query)
+      }
     },
     methods: {
       toggleVisibility: function(layer) {
