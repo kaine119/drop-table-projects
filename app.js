@@ -72,7 +72,7 @@ function initMap() {
   // console.log(findPolygonContaining(map.center, polygons))
 }
 
-var Yposition = "";
+var Yposition = window.scrollY;
 window.addEventListener("scroll", function(){
   Yposition = window.scrollY;
   updatehtml();
@@ -107,6 +107,7 @@ function updatehtml(){
   if(Yposition >= 1400){
     document.getElementById('map').style.zIndex = 1;
     document.getElementById('card-panel').style.zIndex = 2;
+    document.body.style.overflowY = "hidden";
   }
 }
 var elem = document.querySelector('.collapsible');
