@@ -45,7 +45,7 @@ function drawPolygon(points) {
 // takes an origin point (google.maps.LatLng), layer returned from drawHeatmap() and some distance in meters
 // and returns an array of points within distance.
 function findNearbyPointsInHeatmap(origin, layer, distance) {
-  var count;
+  var count = 0;
   layer.data.forEach(function(point) {
     // if the actualdistance between origin and current point is less than distance....
     if (google.maps.geometry.spherical.computeDistanceBetween(point.location, origin) < distance) {
@@ -69,7 +69,7 @@ function findClosestPointInHeatmap(origin, layer) {
       toReturn = point;
     }
   });
-  return toReturn;
+  return { point: toReturn, distance: minDistance };
 }
 
 // takes a target point (google.maps.LatLng) and array of polygons (google.maps.Polygon)
@@ -78,7 +78,7 @@ function findPolygonContaining(target, polygons) {
   var contains = google.maps.geometry.poly.containsLocation // shortcut
   for (var i = 0; i < polygons.length; i++) {
     // if the current polygon contains target
-    if (contains(target, polygons[i])) {
+    if (contains(target, polygons[i].layerObj)) {
       // cut the loop short; this is the first polygon the point is in
       return polygons[i];
     }
@@ -94,9 +94,21 @@ function handleClicks(event) {
     position: event.latLng,
     map: map
   });
-  sendtocard( event.latLng)
+  document.getElementById('card-panel').innerHTML = ""
+  sendtocard("Point: " + event.latLng);
+
+  Categories.categories.forEach(function (category) {
+    category.heatmaps.forEach(function(heatmap) {
+      sendtocard(heatmap.name + " density: " + findNearbyPointsInHeatmap(event.latLng, heatmap.layerObj, 30000));
+      sendtocard("nearest incident of " + heatmap.name + " is " + Math.round(findClosestPointInHeatmap(event.latLng, heatmap.layerObj).distance / 1000) + "km away");
+    });
+    category.polys.forEach(function(poly) {
+      console.log(poly.layerObj);
+      sendtocard("point within " + poly.name + "? " + (findPolygonContaining(event.latLng, poly.layerObj) ? "yes" : "no"));
+    });
+  })
 }
 
 function sendtocard(text){
-  document.getElementById('card-panel').innerHTML = text;
+  document.getElementById('card-panel').innerHTML +=  text + "<br>";
 }
