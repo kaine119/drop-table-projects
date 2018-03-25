@@ -20,7 +20,7 @@ function drawHeatmapLayer(data) {
   var heatmap = new google.maps.visualization.HeatmapLayer({
     data: dataToPlot
   });
-  heatmap.setMap(map);
+  heatmap.setMap(null);
   return heatmap;
 }
 
@@ -36,7 +36,7 @@ function drawPolygon(points) {
     fillColor: '#FF0000',
     fillOpacity: 0.35
   });
-  polygon.setMap(map)
+  polygon.setMap(null)
   // add click listeners to all polygons drawn, because they have an area that blocks clicks from reaching map
   polygon.addListener('click', handleClicks);
   return polygon;

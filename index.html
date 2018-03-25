@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css">
   <title>Map</title>
   <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
-  <script src="materialize/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -20,6 +20,26 @@
     </div>
   </nav>
   <div id="map" class="z-depth-3"></div>
+  <div class="container">
+   <ul class="collapsible popout" id="dataFilter">
+
+      <li><div class="collapsible-header waves-effect waves-teal"><i class="material-icons">filter_drama</i>
+      First
+    </div><div class="collapsible-body"><ul class="collection">
+
+        <li class="collection-item flow-text"><div>
+          Test
+              <label class="secondary-content"><input type="checkbox" /><span>show data</span></label></div></li>
+
+              
+
+          </ul></div></li>
+
+    </ul>
+  </div>
+
+  <script src="materialize/js/materialize.min.js"></script>
+
   <script type="text/javascript" src="./data.js"></script>
   <script type="text/javascript" src="./map-helpers.js"></script>
   <script type="text/javascript" src="./app.js"></script>

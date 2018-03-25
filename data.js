@@ -14,7 +14,7 @@ Struc:
 cat = {heatmapObj: [l1,l2...],polyObj: [l1,l2...], name=name}
 l = {type: "heatmap", layerObj = LayerOBJ, name = name, state = False }
 l = {type: "polygons", layerObj = [poly1, poly2, ...], name = name}
-poly = {type: "poly", layerObj = layerobj, value = value ,state = False, name = name}
+poly = {type: "poly", layerObj = layerObj, value = value ,state = False, name = name}
 */
 
 function catObj(){
@@ -24,13 +24,24 @@ function catObj(){
   this.addCategory = function (catName){
 
     //check if category already exist
-    for (i=0;i<this.categories.length;i++){
+    for (var i=0;i<this.categories.length;i++){
       if (this.categories[i].name == catName){
         console.log("This category already exist!");
         return 0;
       }
     }
     this.categories.push( new cat(catName) );
+  }
+  this.allOff = function(){
+  	for (var i=0;i<this.categories.length;i++){
+  		this.categories[i].allOff();
+  	}
+  }
+
+  this.allOn = function(gMap){
+  	for (var i=0;i<this.categories.length;i++){
+  		this.categories[i].allOn(gMap);
+  	}
   }
 }
 
@@ -41,7 +52,7 @@ function cat(catName){
 
   this.addHeatmapLayer = function (layerName, data){
     //check if category already exist
-    for (i=0;i<this.heatmaps.name;i++){
+    for (var i=0;i<this.heatmaps.name;i++){
       if (this.heatmaps[i].name == layerName){
         console.log("This heatmap already exist!");
         return 0;
@@ -52,7 +63,7 @@ function cat(catName){
 
   this.addPolyLayer = function (layerName){
     //check if category already exist
-    for (i=0;i<this.polys.name;i++){
+    for (var i=0;i<this.polys.name;i++){
       if (this.polys[i].name == layerName){
         console.log("This area map already exist!");
         return 0;
@@ -60,13 +71,41 @@ function cat(catName){
     }
     this.polys.push( new polyObj(layerName) );
   }
+  this.allOff = function(){
+  	for ( var i=0;i<this.heatmaps.length;i++){
+  		this.heatmaps[i].offMap();
+  	}
+  	for (var i=0;i<this.polys.length;i++){
+  		this.polys[i].allOff();
+  	}
+  }
+
+  this.allOn = function(gMap){
+  	for (var i=0;i<this.heatmaps.length;i++){
+  		this.heatmaps[i].onMap(gMap);
+  	}
+  	for (var i=0;i<this.polys.length;i++){
+  		this.polys[i].allOn(gMap);
+  	}	
+  }
+
 }
 
 function heatmapObj(layerName, data){
   this.type = "heatmap";
   this.name = layerName;
   this.state = false;
-  this.layerObj = drawHeatmapLayer(data);
+  //this.layerObj = drawHeatmapLayer(data);
+  var dataToPlot = [];
+  for (var i = 0; i < data.length; i++) { 
+    dataToPlot.push({
+      location: new google.maps.LatLng(data[i]['lat'], data[i]['lng']),
+      weight: data[i]['weight']
+    });
+  }
+  this.layerObj = new google.maps.visualization.HeatmapLayer({
+    data: dataToPlot
+  });
 
   this.onMap = function(gMap){
     this.state = true;
@@ -86,7 +125,7 @@ function polyObj(layerName){
   this.minVal = 10000000.0;
 
   this.addPolygon = function(data, name=null){
-    updateOpacity = false;
+    var updateOpacity = false;
     if (data[1]>this.maxVal){
       this.maxVal = data[1];
       updateOpacity = true;
@@ -105,9 +144,20 @@ function polyObj(layerName){
   }
 
   this.updatePolyOpacity = function(){
-    for (i = 0;i<this.layerObj.length;i++){
+    for (var i = 0;i<this.layerObj.length;i++){
       this.layerObj[i].updateOpacity([this.minVal,this.maxVal]);
     }
+  }
+  this.allOff = function(){
+  	for (var i=0;i<this.layerObj.length;i++){
+  		this.layerObj[i].offMap();
+  	}
+  }
+
+  this.allOn = function(gMap){
+  	for (var i=0;i<this.layerObj.length;i++){
+  		this.layerObj[i].onMap(gMap);
+  	}	
   }
 
 }
@@ -126,6 +176,7 @@ function polygon(data, name, value, range){
       fillColor: '#FF0000',
       fillOpacity: this.opacity
     });
+  this.layerObj.addListener('click', handleClicks);
   this.updateOpacity = function(range){
     this.range = range;
     this.opacity = ( this.value - this.range[0] )/(this.range[1] - this.range[0] + 0.00000000001) * 0.6 + 0.2;
@@ -142,4 +193,26 @@ function polygon(data, name, value, range){
     this.state = false;
     this.layerObj.setMap(null);
   }
+}
+
+function html_collapsible_table(cat){
+	var mainS = '<li><div class="collapsible-header waves-effect waves-teal"><i class="material-icons">filter_drama</i>',
+	mainE = '</div><div class="collapsible-body"><ul class="collection">',
+	liS = '<li class="collection-item flow-text"><div>',
+	liE = '<label class="secondary-content"><input type="checkbox" /><span>show data</span></label></div></li>',
+	E = '</ul></div></li>';
+	var finalString = "";
+	for (var i=0;i<cat.categories.length;i++){
+		finalString += mainS + cat.categories[i].name + mainE;
+		for(var z=0; z<cat.categories[i].heatmaps.length;z++){
+			finalString += liS + cat.categories[i].heatmaps[z].name + liE;
+		}
+		for(var z=0; z<cat.categories[i].polys.length;z++){
+			finalString += liS + cat.categories[i].polys[z].name + liE;
+		}
+		finalString += E;
+	}
+	
+	return finalString;
+
 }
