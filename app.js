@@ -108,7 +108,10 @@ function updatehtml(){
     document.getElementById('map').style.zIndex = 1;
     document.getElementById('card-panel').style.zIndex = 2;
     document.getElementById('reset').style.zIndex = 2;
-    document.getElementById('stuff').style.zIndex = 2;
+    var containers = document.getElementsByClassName('stuff');
+    for (var i = 0; i < containers.length; i++){
+      containers[i].style.zIndex = 2;
+    }
     document.body.style.overflowY = "hidden";
   }
 }
@@ -137,6 +140,6 @@ function darken(){
 }
 
 function lighten(){
-  document.getElementById('sidenav').style.left = "-25vw";
+  document.getElementById('sidenav').style.left = "-45vw";
   document.getElementById('darken').style.zIndex = -3;
 }
