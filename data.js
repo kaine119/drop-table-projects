@@ -43,13 +43,28 @@ function catObj(){
   		this.categories[i].onMap(gMap);
   	}
   }
+
+  this.toggle_on_off = function(a,b,c,gMap){
+  	if (b == 1){
+  		if(this.categories[a].polys[c].state == 0){
+  			this.categories[a].polys[c].offMap(gMap);
+  		}else{
+  			this.categories[a].polys[c].offMap();
+  		}
+  	}else{
+  		if(this.categories[a].heatmaps[c].state == 0){
+  			this.categories[a].heatmaps[c].onMap(gMap);
+  		}else{
+  			this.categories[a].heatmaps[c].offMap();
+  		}
+  	}
+   }
 }
 
 function cat(catName){
   this.heatmaps = [];
   this.polys = [];
   this.name = catName;
-
   this.addHeatmapLayer = function (layerName, data){
     //check if category already exist
     for (var i=0;i<this.heatmaps.name;i++){
@@ -94,7 +109,7 @@ function cat(catName){
 function heatmapObj(layerName, data){
   this.type = "heatmap";
   this.name = layerName;
-  this.state = false;
+  this.state = 0;
   //this.layerObj = drawHeatmapLayer(data);
   var dataToPlot = [];
   for (var i = 0; i < data.length; i++) { 
@@ -108,11 +123,11 @@ function heatmapObj(layerName, data){
   });
 
   this.onMap = function(gMap){
-    this.state = true;
+    this.state = 1;
     this.layerObj.setMap(gMap);
   }
   this.offMap = function(){
-    this.state = false;
+    this.state = 0;
     this.layerObj.setMap(null);
   }
 }
@@ -123,7 +138,7 @@ function polyObj(layerName){
   this.layerObj = [];
   this.maxVal = -10000000.0;
   this.minVal = 10000000.0;
-
+  this.state = false;
   this.addPolygon = function(data, name=null){
     var updateOpacity = false;
     if (data[1]>this.maxVal){
@@ -148,13 +163,15 @@ function polyObj(layerName){
       this.layerObj[i].updateOpacity([this.minVal,this.maxVal]);
     }
   }
-  this.offMap = function(){
+  this.offMap= function(){
+  	this.state = false;
   	for (var i=0;i<this.layerObj.length;i++){
   		this.layerObj[i].offMap();
   	}
   }
 
   this.onMap = function(gMap){
+  	this.state = true;
   	for (var i=0;i<this.layerObj.length;i++){
   		this.layerObj[i].onMap(gMap);
   	}	
@@ -196,19 +213,22 @@ function polygon(data, name, value, range){
 }
 
 function html_collapsible_table(cat){
-	var mainS = '<li><div class="collapsible-header waves-effect waves-teal"><i class="material-icons">filter_drama</i>',
+	var mainS_ids = '<li id="',
+	mainS_ide = '"><div class="collapsible-header waves-effect waves-teal"><i class="material-icons">filter_drama</i>',
 	mainE = '</div><div class="collapsible-body"><ul class="collection">',
-	liS = '<li class="collection-item flow-text"><div>',
-	liE = '<label class="secondary-content"><input type="checkbox" /><span>show data</span></label></div></li>',
+	liS_ids = '<li id="',
+	liS_ide = '" class="collection-item flow-text"><div>',
+	liECs = '<label onmouseup="',
+	liECe = '" class="secondary-content"><input type="checkbox" /><span>show data</span></label></div></li>',
 	E = '</ul></div></li>';
 	var finalString = "";
 	for (var i=0;i<cat.categories.length;i++){
-		finalString += mainS + cat.categories[i].name + mainE;
+		finalString += mainS_ids + String(i) + mainS_ide + cat.categories[i].name + mainE;
 		for(var z=0; z<cat.categories[i].heatmaps.length;z++){
-			finalString += liS + cat.categories[i].heatmaps[z].name + liE;
+			finalString += liS_ids + String(i) + "_0_"+ String(z) + liS_ide + cat.categories[i].heatmaps[z].name + liECs + "ckChange('" + String(i) + "_0_"+ String(z)+"')"+ liECe;
 		}
 		for(var z=0; z<cat.categories[i].polys.length;z++){
-			finalString += liS + cat.categories[i].polys[z].name + liE;
+			finalString += liS_ids + String(i) + "_1_"+ String(z) + liS_ide + cat.categories[i].polys[z].name + liECs +  "ckChange('" + String(i) + "_1_"+ String(z)+"')"+liECe;
 		}
 		finalString += E;
 	}

@@ -73,6 +73,10 @@ function initMap() {
 }
 
 
+function ckChange(id){
+  var indexes = id.split("_");
+  Categories.toggle_on_off(parseInt(indexes[0]),parseInt(indexes[1]),parseInt(indexes[2]),map);
+}
 
 //console.log(html_collapsible_table(Categories))
 //document.getElementById("dataFilter").innerHTML = "<h1>HELLO</h1>"
