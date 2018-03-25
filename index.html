@@ -28,6 +28,10 @@
 
   <div id="map" class="z-depth-3"></div>
   <div class="container" id="category-list">
+    <div class="input-field col s12">
+              <input id="search" type="text" v-model="query">
+              <label for="search">Search</label>
+            </div>
     <ul class="collapsible popout" id="dataFilter">
       <input type="text" v-model="query">
       <li v-for="category in categories">
