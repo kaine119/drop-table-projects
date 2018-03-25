@@ -26,7 +26,8 @@ nav{
 	top:150vh;
 }
 #card2{
-	top:250vh;
+	top:300vh;
+	height: 1vh;
 }
 #map{
 	position: fixed;

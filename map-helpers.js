@@ -95,3 +95,5 @@ function handleClicks(event) {
     map: map
   });
 }
+
+function 

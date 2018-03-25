@@ -104,6 +104,9 @@ function updatehtml(){
     document.getElementById('navbar').style.bottom = "20vh";
     document.getElementById('navbar').style.top = "";
   }
+  if(Yposition >= 1400){
+    document.getElementById('map').style.zIndex = 1;
+  }
 }
 var elem = document.querySelector('.collapsible');
 var instance = M.Collapsible.init(elem, {});
