@@ -65,6 +65,7 @@ function cat(catName){
   this.heatmaps = [];
   this.polys = [];
   this.name = catName;
+  this.state = true;
   this.addHeatmapLayer = function (layerName, data){
     //check if category already exist
     for (var i=0;i<this.heatmaps.name;i++){
