@@ -106,6 +106,7 @@ function updatehtml(){
   }
   if(Yposition >= 1400){
     document.getElementById('map').style.zIndex = 1;
+    document.getElementById('card-panel').style.zIndex = 2;
   }
 }
 var elem = document.querySelector('.collapsible');
