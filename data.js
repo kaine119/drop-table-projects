@@ -32,15 +32,15 @@ function catObj(){
     }
     this.categories.push( new cat(catName) );
   }
-  this.allOff = function(){
+  this.offMap = function(){
   	for (var i=0;i<this.categories.length;i++){
-  		this.categories[i].allOff();
+  		this.categories[i].offMap();
   	}
   }
 
-  this.allOn = function(gMap){
+  this.onMap = function(gMap){
   	for (var i=0;i<this.categories.length;i++){
-  		this.categories[i].allOn(gMap);
+  		this.categories[i].onMap(gMap);
   	}
   }
 }
@@ -71,21 +71,21 @@ function cat(catName){
     }
     this.polys.push( new polyObj(layerName) );
   }
-  this.allOff = function(){
+  this.offMap = function(){
   	for ( var i=0;i<this.heatmaps.length;i++){
   		this.heatmaps[i].offMap();
   	}
   	for (var i=0;i<this.polys.length;i++){
-  		this.polys[i].allOff();
+  		this.polys[i].offMap();
   	}
   }
 
-  this.allOn = function(gMap){
+  this.onMap = function(gMap){
   	for (var i=0;i<this.heatmaps.length;i++){
   		this.heatmaps[i].onMap(gMap);
   	}
   	for (var i=0;i<this.polys.length;i++){
-  		this.polys[i].allOn(gMap);
+  		this.polys[i].onMap(gMap);
   	}	
   }
 
@@ -148,13 +148,13 @@ function polyObj(layerName){
       this.layerObj[i].updateOpacity([this.minVal,this.maxVal]);
     }
   }
-  this.allOff = function(){
+  this.offMap = function(){
   	for (var i=0;i<this.layerObj.length;i++){
   		this.layerObj[i].offMap();
   	}
   }
 
-  this.allOn = function(gMap){
+  this.onMap = function(gMap){
   	for (var i=0;i<this.layerObj.length;i++){
   		this.layerObj[i].onMap(gMap);
   	}	

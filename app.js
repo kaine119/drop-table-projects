@@ -18,8 +18,30 @@ function initMap() {
     Categories.categories[0].polys[0].addPolygon([electricity_coverage[i],i]);
   }
   Categories.categories[1].addHeatmapLayer("mine casualties", mine_casualties);
-  Categories.allOn(map);
+  Categories.onMap(map);
   map.addListener('click', handleClicks);
+
+
+
+  var categoryListApp = new Vue({
+    el: "#dataFilter",
+    data: {
+      categories: Categories.categories
+    },
+    methods: {
+      toggleVisibility: function(layer) {
+        if (layer.state) {
+          layer.offMap();
+        } else {
+          layer.onMap(map);
+        }
+      }
+    }
+  })
+
+
+  var elem = document.querySelector('.collapsible');
+  var instance = M.Collapsible.init(elem, {});
 
 
   /*===============================
@@ -48,11 +70,8 @@ function initMap() {
     region.strokeWeight = 0
   }
   // console.log(findPolygonContaining(map.center, polygons))
-  document.getElementById("dataFilter").innerHTML = html_collapsible_table(Categories);
 }
 
-var elem = document.querySelector('.collapsible');
-var instance = M.Collapsible.init(elem, {});
 
 
 //console.log(html_collapsible_table(Categories))
