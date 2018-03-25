@@ -26,7 +26,7 @@ function initMap() {
   var categoryListApp = new Vue({
     el: "#dataFilter",
     data: {
-      categories: Categories.categories
+      categories: Categories.categories,
     },
     methods: {
       toggleVisibility: function(layer) {
@@ -34,6 +34,13 @@ function initMap() {
           layer.offMap();
         } else {
           layer.onMap(map);
+        }
+      },
+      toggleAllInCategory: function(category) {
+        if (category.state) {
+          category.offMap();
+        } else {
+          category.onMap(map);
         }
       }
     }
