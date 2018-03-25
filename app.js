@@ -1,4 +1,7 @@
 var map;
+var currentPin;
+var Categories = new catObj();
+
 function initMap() {
 
   // PUT ALL MAP DRAWING HERE!
@@ -7,41 +10,45 @@ function initMap() {
     center: {lat: 11.5, lng: 104.8},
     zoom: 7
   });
-}
 
-// takes an array of data in the form {lat, lng, weight} 
-// and plots all of them on the map.
-// lat, lng: coordinates for point
-// weight: weight of heatmap point (standard = 1)
-function drawHeatmapLayer(data) {
-  var dataToPlot = [];
-  for (var i = 0; i < data.length; i++) { 
-    dataToPlot.push({
-      location: new google.maps.LatLng(data[i]['lat'], data[i]['lng']),
-      weight: data[i]['weight']
-    });
+  Categories.addCategory("electrity");
+  Categories.addCategory("health hazard");
+  Categories.categories[0].addPolyLayer("coverage");
+  for (var i =0;i<electricity_coverage.length;i++){
+    Categories.categories[0].polys[0].addPolygon([electricity_coverage[i],i]);
   }
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: dataToPlot
-  });
-  heatmap.setMap(map);
-  return heatmap;
-}
+  Categories.categories[1].addHeatmapLayer("mine casualties", mine_casualties);
+  Categories.allOn(map);
+  map.addListener('click', handleClicks);
 
-// takes an array of coordinates {lat, lng}
-// and draws a polygon through those points, in order.
-// returns a polygon object
-function drawPolygon(points) {
-  var polygon = new google.maps.Polygon({
-    paths: points,
-    strokeColor: "#FF0000",
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35
+
+  /*===============================
+  =            TESTING            =
+  ===============================*/
+
+  var mineCasualtiesHeatmap = drawHeatmapLayer(mine_casualties);
+  mineCasualtiesHeatmap.set("radius", 30);
+  new google.maps.Marker({
+    position: map.center,
+    map: map
   });
-  polygon.setMap(map)
-  return polygon;
+  // console.log(findNearbyPointsInHeatmap(map.center, mineCasualtiesHeatmap, 30))
+  // console.log(mineCasualtiesHeatmap.data)
+  new google.maps.Marker({
+    position: findClosestPointInHeatmap(map.center, mineCasualtiesHeatmap).location,
+    map: map,
+    label: "Closest"
+  });
+
+
+  var polygons = []
+  for (var i = 0; i < electricity_coverage.length; i++) {
+    var region = drawPolygon(electricity_coverage[i])
+    polygons.push(region);
+    region.strokeWeight = 0
+  }
+  // console.log(findPolygonContaining(map.center, polygons))
+  document.getElementById("dataFilter").innerHTML = html_collapsible_table(Categories);
 }
 
 var Yposition = "";
@@ -77,3 +84,9 @@ function updatehtml(){
     document.getElementById('navbar').style.top = "";
   }
 }
+var elem = document.querySelector('.collapsible');
+var instance = M.Collapsible.init(elem, {});
+
+
+//console.log(html_collapsible_table(Categories))
+//document.getElementById("dataFilter").innerHTML = "<h1>HELLO</h1>"
