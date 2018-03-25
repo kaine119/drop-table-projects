@@ -7,7 +7,6 @@ function initMap() {
     center: {lat: 11.5, lng: 104.8},
     zoom: 7
   });
-
 }
 
 // takes an array of data in the form {lat, lng, weight} 
@@ -43,4 +42,38 @@ function drawPolygon(points) {
   });
   polygon.setMap(map)
   return polygon;
+}
+
+var Yposition = "";
+window.addEventListener("scroll", function(){
+  Yposition = window.scrollY;
+  updatehtml();
+});
+
+var viewportheight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+function updatehtml(){
+  if(Yposition >= 0){
+    document.getElementById('map1').style.height = (viewportheight - Yposition)+"px";
+  }
+  if (Yposition >= viewportheight){
+    document.getElementById('map1').style.height = "0";
+  }
+  if ((1.6*viewportheight - Yposition)<= 0 ){
+    document.getElementById('map2').style.height = "0px";
+  }
+  else if (Yposition >= 0.7*viewportheight){
+    document.getElementById('map2').style.height = (1.6*viewportheight - Yposition)+"px";
+  } else {
+    document.getElementById('map2').style.height = "100vh";
+  }
+  if(Yposition >= viewportheight*0.7){
+    document.getElementById('navbar').style.position = "fixed";
+    document.getElementById('navbar').style.top = "0";
+    document.getElementById('navbar').style.bottom = "";
+  } else {
+    document.getElementById('navbar').style.position = "absolute";
+    document.getElementById('navbar').style.bottom = "20vh";
+    document.getElementById('navbar').style.top = "";
+  }
 }

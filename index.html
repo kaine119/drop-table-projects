@@ -6,22 +6,27 @@
   <link rel="stylesheet" href="style.css">
   <title>Map</title>
   <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
-  <script src="materialize.min.js"></script>
+  <script src="./materialize/js/materialize.min.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-	<nav>
+<body onload="setTimeout(function(){updatehtml();document.getElementById('map').style.position='fixed';},1000)">
+	<nav id="navbar">
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Help Me.</a>
+      <div class="brand-logo">Help Me.</div>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a href="#">Map</a></li>
         <li><a href="#">About us</a></li>
       </ul>
     </div>
   </nav>
-  <div id="map" class="z-depth-3"></div>
+  <div id="map" class=""></div>
+  <div class="cards" id="card0"></div>
+  <div class="cards" id="card1"></div>
+  <div class="cards" id="card2"></div>
+  <div id="map1"></div>
+  <div id="map2"></div>
+
   <script type="text/javascript" src="./app.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVrWvMC4ofsa2IBbnubiVYRvaav--aKPk&callback=initMap&libraries=visualization"
-    async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVrWvMC4ofsa2IBbnubiVYRvaav--aKPk&callback=initMap&libraries=visualization" async defer></script>
 </body>
 </html>
