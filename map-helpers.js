@@ -94,4 +94,9 @@ function handleClicks(event) {
     position: event.latLng,
     map: map
   });
+  sendtocard( event.latLng)
+}
+
+function sendtocard(text){
+  document.getElementById('card-panel').innerHTML = text;
 }

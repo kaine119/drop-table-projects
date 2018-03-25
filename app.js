@@ -41,6 +41,13 @@ function initMap() {
         } else {
           layer.onMap(map);
         }
+      },
+      toggleAllInCategory: function(category) {
+        if (category.state) {
+          category.offMap();
+        } else {
+          category.onMap(map);
+        }
       }
     }
   })
@@ -78,7 +85,7 @@ function initMap() {
   // console.log(findPolygonContaining(map.center, polygons))
 }
 
-var Yposition = "";
+var Yposition = window.scrollY;
 window.addEventListener("scroll", function(){
   Yposition = window.scrollY;
   updatehtml();
@@ -112,6 +119,13 @@ function updatehtml(){
   }
   if(Yposition >= 1400){
     document.getElementById('map').style.zIndex = 1;
+    document.getElementById('card-panel').style.zIndex = 2;
+    document.getElementById('reset').style.zIndex = 2;
+    var containers = document.getElementsByClassName('stuff');
+    for (var i = 0; i < containers.length; i++){
+      containers[i].style.zIndex = 2;
+    }
+    document.body.style.overflowY = "hidden";
   }
 }
 var elem = document.querySelector('.collapsible');
@@ -126,4 +140,19 @@ function ckChange(id){
 //document.getElementById("dataFilter").innerHTML = "<h1>HELLO</h1>"
 function scrolltobottom(){
   window.scrollTo(0,1500);
+}
+
+function reset(){
+  window.scrollTo(0,0);
+  location.reload();
+}
+
+function darken(){
+  document.getElementById('sidenav').style.left = 0;
+  document.getElementById('darken').style.zIndex = 4;
+}
+
+function lighten(){
+  document.getElementById('sidenav').style.left = "-45vw";
+  document.getElementById('darken').style.zIndex = -3;
 }
